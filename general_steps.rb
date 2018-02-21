@@ -28,15 +28,18 @@ Sanitize_string is used as the first step to sanitize a message to be enciphered
     if string_size % 5 != 0
       x_number = 5 - (string_size % 5)
     end
-    # Padding the created "X" into the string
-    sanitize_string = onlyupper_string + ('X' * x_number) # be aware of the order, 'X' should be in front of Fixnum
-    return sanitize_string
+    # Padding the created "X" into the string. Be aware of the order: 'X' should be in front  of the Fixnum
+    sanitize_string = onlyupper_string + ('X' * x_number)
+    # Add one space every five characters
+    result_string = sanitize_string.gsub(/(.{5})/, '\1 ').strip
+    # Return the final result
+    return result_string
   end
 end
 
 
-=begin
 
+=begin
 # This is the testing code for the sanitize_string function
 
 testkeystream = "abcdefg"
@@ -78,8 +81,8 @@ puts teststring5
 puts testsample5
 puts testsample5.length
 puts "--------------------"
-puts teststring6
-puts testsample6
-puts testsample6.length
-
+#puts teststring6
+#puts testsample6
+#puts testsample6.length
 =end
+
