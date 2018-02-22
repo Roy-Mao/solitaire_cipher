@@ -5,6 +5,7 @@ class GeneralOperations
 
   attr_accessor :keystream
 
+  # Keystream should be an array of integers, using 0 to represent a space
   def initialize(keystream)
     @keystream = keystream
   end
@@ -35,8 +36,58 @@ Sanitize_string is used as the first step to sanitize a message to be enciphered
     # Return the final result
     return result_string
   end
+
+=begin
+Generate the encrypted characgters
+=end
+  def encrypt_char(given_string)
+    # Convert the given_string(result_string) to numbers
+    first_array = []
+    given_string = sanitize_string(given_string)
+    string_array = given_string.split('')
+    string_array.each do |x|
+     corresponding_digit_one = x.ord - 64
+     first_array << corresponding_digit_one
+    end
+    # Combine the numbers in two arrays together and generate a new array
+    generated_array = []
+    first_array.each_with_index do |value, index|
+      if value == -32 or keystream[index] == 0
+        generated_ele = 0
+      else
+        generated_ele = value + keystream[index]
+      end
+      generated_array << generated_ele
+    end
+    # Conver the integers in generated_array back to characters
+    result_array = []
+    generated_array.each do |item|
+      while item > 26 do
+        item -= 26
+      end 
+      if item == 0
+        item = " "
+      else
+        item += 64
+      end
+      item = item.chr
+      result_array << item
+    end
+    # Return the generated characters as an array
+    #puts result_array
+    return result_array 
+  end
 end
 
+=begin
+
+# This is the testing code for the encrypt_char method
+
+keystream_array = [4,49,10,24,8,0,51,44,6,4,33]
+new_instance = GeneralOperations.new(keystream_array)
+result = new_instance.encrypt_char("aaaaaaaaaa")
+print result
+=end
 
 
 =begin
