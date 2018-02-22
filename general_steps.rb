@@ -5,7 +5,7 @@ class GeneralOperations
 
   attr_accessor :keystream
 
-  # Keystream should be an array of integers, using 0 to represent a space
+  # Keystream should be an array of integers, using 0 to represent a space, the range should be 1 to 26
   def initialize(keystream)
     @keystream = keystream
   end
@@ -74,18 +74,30 @@ Generate the encrypted characgters
       result_array << item
     end
     # Return the generated characters as an array
-    #puts result_array
     return result_array 
   end
 end
 
-=begin
 
+class GenerateKeystream(keyed_deck)
+
+  attr_accessor :keyed_deck
+
+  def initialize(keyed_deck)
+    @keyed_deck = keyed_deck
+  end
+
+
+
+
+end
+
+=begin
 # This is the testing code for the encrypt_char method
 
-keystream_array = [4,49,10,24,8,0,51,44,6,4,33]
+keystream_array = [4,23,10,24,8,0,25,18,6,4,7,0,20,13,19,8,16,0,21,21,18,24,10]
 new_instance = GeneralOperations.new(keystream_array)
-result = new_instance.encrypt_char("aaaaaaaaaa")
+result = new_instance.encrypt_char("code in ruby, live longer")
 print result
 =end
 

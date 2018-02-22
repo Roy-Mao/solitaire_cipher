@@ -56,3 +56,28 @@ _Example:_
 _Example:_
 
 > GLNCQ MJAFF FVOMB JIYCB
+
+### Generating Keystream
+
+#### Step 1:
+
+1. Find Joker A (smaller joker, 53 in the array) and move it down one card.
+
+#### Step 2:
+
+1. Find Joker B (bigger joker, 54 in the array) and move it down two cards.
+
+#### Step 3:
+
+1. Perform a triple cut. Exchange all the cards above the joker, which is nearest to the top and all the cards under the joker, which is furthurest from the bottom.
+
+#### Step 4:
+
+1. Perform a count cut. See the number of the bottom card. Count that many cards from the top and move all these cards, inserting them just above the bottom card. The bottom card shall not be moved in this step.
+
+#### Step 5:
+
+1. Find the output card. Look at the top card and count that many times and the card after your count should be the output card. If you hit a joker (53 or 54 in my case), just do nothing and come back to step 1, doing it all over again.
+
+2. Because the keystream is the upper case 26 English letters. Therefore we need to know how to transform our output card (number) to the number between 1 - 26. Simply minus 26 if the output number is greater than 26
+
