@@ -1,4 +1,7 @@
 class Foo
+  
+  @@classvar1 = 1
+  @@classvar2 = 2
 
   attr_accessor :attr_one, :attr_two
 

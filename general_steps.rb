@@ -81,35 +81,51 @@ end
 
 class GenerateKeystream
 
-  attr_accessor :keyed_deck
+  # smaller_joker, bigger_joker and last_card_index should be set to class variable constant
+  # Because these elements are not supposed to change regardless of the deck settig.
+  # Ask yourself if you wanna change these values below during the run time of the code. If the answer is no, then use CONSTANTS instead of class variable
+  SMALLER_JOKER = 53
+  LAST_CARD_INDEX = 53
+  BIGGER_JOKER = 54
+
+  # Because what I wanna do is to read from the keyed_deck, but do not wanna change it anyway. I use attr_reader instead of attr_accessor
+  # To prevent it from changing the keyed_deck in run time
+  attr_reader :keyed_deck
 
   # Keyeddeck should be an array of integers ranging from 1 to 54
   def initialize(keyed_deck)
     @keyed_deck = keyed_deck
   end
 
-  def move_one_down
-    # Firstly, create a copy of the original keyed_deck as the operation deck
+  def move_one_down(given_deck = @keyed_deck)
+    # Firstly, create a copy of the original keyed_deck as the operation deck if given_deck == @keyed_deck
     # Note the difference between deep copy and shallow copy in ruby. How to deep copy an array or hash or class in ruby?
-    operation_deck = Marshal.load(Marshal.dump(keyed_deck))
+    if given_deck == keyed_deck
+    operation_deck = Marshal.load(Marshal.dump(given_deck))
     # Check if the bottom card is the smaller joker A (or 53 in my case).
     # If it is, then move it under the top card. Otherwise, just move it under the next card
-    smaller_joker = 53
-    last_card_index = 53
-    if operation_deck[last_card_index] == smaller_joker
+    if operation_deck[LAST_CARD_INDEX] == SMALLER_JOKER
       # Pop it out from the array and then insert it under the top card
       result_deck = operation_deck.insert(1, operation_deck.pop)
     else
       # If the smaller joker is not the bottom card, then just swap it with the card next to it
-      result_deck = operation_deck.insert(operation_deck.index(smaller_joker) + 1, operation_deck.delete_at(operation_deck.index(smaller_joker)))
+      result_deck = operation_deck.insert(operation_deck.index(SMALLER_JOKER) + 1, operation_deck.delete_at(operation_deck.index(SMALLER_JOKER)))
     end 
     return result_deck
   end
+
+  def move_two_down(given_deck)
+    operation_deck
+
+  end
+
+
+
 end
 
 
-=begin
 
+=begin
 # This is the testing code for GenerateKeystream::move_one_down method
 
 keyed_deck_one = (1..54).to_a
@@ -123,7 +139,8 @@ keystream_two = GenerateKeystream.new(keyed_deck_two)
 result_two = keystream_two.move_one_down
 keystream_three = GenerateKeystream.new(keyed_deck_three)
 result_three = keystream_three.move_one_down
-
+keystrem_one = GenerateKeystream.new(keyed_deck_one)
+result_four = keystrem_one.move_one_down(keyed_deck_two)
 
 puts keyed_deck_one.inspect
 puts result_one.inspect
@@ -133,7 +150,11 @@ puts result_two.inspect
 puts "-----"
 puts keyed_deck_three.inspect
 puts result_three.inspect
+puts "-----"
+puts keyed_deck_one.inspect
+puts result_four.inspect
 =end
+
 
 =begin
 # This is the testing code for the encrypt_char method
