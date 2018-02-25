@@ -79,18 +79,61 @@ Generate the encrypted characgters
 end
 
 
-class GenerateKeystream(keyed_deck)
+class GenerateKeystream
 
   attr_accessor :keyed_deck
 
+  # Keyeddeck should be an array of integers ranging from 1 to 54
   def initialize(keyed_deck)
     @keyed_deck = keyed_deck
   end
 
-
-
-
+  def move_one_down
+    # Firstly, create a copy of the original keyed_deck as the operation deck
+    # Note the difference between deep copy and shallow copy in ruby. How to deep copy an array or hash or class in ruby?
+    operation_deck = Marshal.load(Marshal.dump(keyed_deck))
+    # Check if the bottom card is the smaller joker A (or 53 in my case).
+    # If it is, then move it under the top card. Otherwise, just move it under the next card
+    smaller_joker = 53
+    last_card_index = 53
+    if operation_deck[last_card_index] == smaller_joker
+      # Pop it out from the array and then insert it under the top card
+      result_deck = operation_deck.insert(1, operation_deck.pop)
+    else
+      # If the smaller joker is not the bottom card, then just swap it with the card next to it
+      result_deck = operation_deck.insert(operation_deck.index(smaller_joker) + 1, operation_deck.delete_at(operation_deck.index(smaller_joker)))
+    end 
+    return result_deck
+  end
 end
+
+
+=begin
+
+# This is the testing code for GenerateKeystream::move_one_down method
+
+keyed_deck_one = (1..54).to_a
+keyed_deck_two = (1..52).to_a
+keyed_deck_two << 54 << 53
+keyed_deck_three = keyed_deck_two.shuffle
+
+keystream_one = GenerateKeystream.new(keyed_deck_one)
+result_one = keystream_one.move_one_down
+keystream_two = GenerateKeystream.new(keyed_deck_two)
+result_two = keystream_two.move_one_down
+keystream_three = GenerateKeystream.new(keyed_deck_three)
+result_three = keystream_three.move_one_down
+
+
+puts keyed_deck_one.inspect
+puts result_one.inspect
+puts "-----"
+puts keyed_deck_two.inspect
+puts result_two.inspect
+puts "-----"
+puts keyed_deck_three.inspect
+puts result_three.inspect
+=end
 
 =begin
 # This is the testing code for the encrypt_char method

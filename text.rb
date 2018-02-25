@@ -1,19 +1,20 @@
 class Foo
-  def mydef1(sometext)
-  	puts sometext
+
+  attr_accessor :attr_one, :attr_two
+
+  def initialize(attr_one, attr_two)
+  	@attr_one = attr_one
+  	@attr_two = attr_two
   end
 
-  def mydef2(sometexttoo)
-    mydef1(sometexttoo)
+  def show
+  	puts @attr_one
+  	puts @attr_two
   end
 
 
 end
 
-myinstance = Foo.new
+myinstance = Foo.new("var1", "var2")
 
-myinstance.mydef1("abc")
-
-puts '------------'
-
-myinstance.mydef2("abcd")
+myinstance.show
