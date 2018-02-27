@@ -89,7 +89,7 @@ class GenerateKeystream
   BIGGER_JOKER = 54
 
   # Because what I wanna do is to read from the keyed_deck, but do not wanna change it anyway. I use attr_reader instead of attr_accessor
-  # To prevent it from changing the keyed_deck in run time
+  # To prevent it from changing the keyed_deck using "instance.keyed_deck = " is not allowd
   attr_reader :keyed_deck
 
   # Keyeddeck should be an array of integers ranging from 1 to 54
@@ -98,9 +98,8 @@ class GenerateKeystream
   end
 
   def move_one_down(given_deck = @keyed_deck)
-    # Firstly, create a copy of the original keyed_deck as the operation deck if given_deck == @keyed_deck
+    # Firstly, create a copy of the original keyed_deck as the operation deck, because I do not wanna touch or change the original keyed_deck
     # Note the difference between deep copy and shallow copy in ruby. How to deep copy an array or hash or class in ruby?
-    if given_deck == keyed_deck
     operation_deck = Marshal.load(Marshal.dump(given_deck))
     # Check if the bottom card is the smaller joker A (or 53 in my case).
     # If it is, then move it under the top card. Otherwise, just move it under the next card
@@ -115,15 +114,52 @@ class GenerateKeystream
   end
 
   def move_two_down(given_deck)
-    operation_deck
-
+    operation_deck = Marshal.load(Marshal.dump(given_deck))
+    if operation_deck[LAST_CARD_INDEX] == BIGGER_JOKER
+      result_deck = operation_deck.insert(2, operation_deck.pop)
+    elsif operation_deck[LAST_CARD_INDEX - 1] == BIGGER_JOKER
+      result_deck = operation_deck.insert(1, operation_deck.delete_at(operation_deck.index(BIGGER_JOKER)))
+    else
+      result_deck = operation_deck.insert(operation_deck.index(BIGGER_JOKER) + 2, operation_deck.delete_at(operation_deck.index(BIGGER_JOKER)))
+    end
+    return result_deck
   end
-
-
-
 end
 
+=begin 
 
+# This is the testing code for GenerateKeystream::move_two_down
+
+keyed_deck_one = (1..54).to_a
+keyed_deck_two = (1..52).to_a
+keyed_deck_two << 54 << 53
+keyed_deck_three = keyed_deck_two.shuffle
+
+keystream_one = GenerateKeystream.new(keyed_deck_one)
+puts keyed_deck_one.inspect
+puts "--------"
+result_one = keystream_one.move_two_down(keyed_deck_one)
+puts result_one.inspect
+keystream_two = GenerateKeystream.new(keyed_deck_two)
+puts keyed_deck_two.inspect
+puts "---------"
+result_two = keystream_two.move_two_down(keyed_deck_two)
+puts result_two.inspect
+keystream_three = GenerateKeystream.new(keyed_deck_three)
+puts keyed_deck_three.inspect
+puts "----------"
+result_three = keystream_three.move_two_down(keyed_deck_three)
+puts result_three.inspect
+keystrem_one = GenerateKeystream.new(keyed_deck_one)
+puts keyed_deck_one.inspect
+puts "----------"
+result_four = keystrem_one.move_two_down(keyed_deck_two)
+puts result_four.inspect
+puts "-------------Here to see if the original keyed_deck attribute get changed or not-------------"
+puts keystream_one.keyed_deck.inspect
+puts keystream_two.keyed_deck.inspect
+puts keystream_three.keyed_deck.inspect
+=end
 
 =begin
 # This is the testing code for GenerateKeystream::move_one_down method

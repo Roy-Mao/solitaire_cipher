@@ -1,23 +1,22 @@
-class Foo
-  
-  @@classvar1 = 1
-  @@classvar2 = 2
+class Person
+  attr_reader :ethics
+  attr_accessor :name
 
-  attr_accessor :attr_one, :attr_two
-
-  def initialize(attr_one, attr_two)
-  	@attr_one = attr_one
-  	@attr_two = attr_two
+  def initialize(name, ethics)
+  	@name = name
+  	@ethics = ethics
   end
 
-  def show
-  	puts @attr_one
-  	puts @attr_two
-  end
-
+  def change_ethics(str)
+  	@ethics = str
+  end 
 
 end
 
-myinstance = Foo.new("var1", "var2")
+person1 = Person.new("Roy", "Asian")
 
-myinstance.show
+puts person1.name
+puts person1.ethics
+puts "now lets change the ethics of roy to African"
+#person1.ethics("Africans") 
+puts person1.ethics
